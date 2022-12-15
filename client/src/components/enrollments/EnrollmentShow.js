@@ -2,8 +2,9 @@ import { Button, ListGroup, Modal } from "react-bootstrap";
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import EnrollmentForm from "./EnrollmentForm";
+import { EnrollmentConsumer } from "../../providers/EnrollmentProvider";
 
-const EnrollmentShow = ({ user_id, id, course_id, updateEnrollment, deleteEnrollment, users }) => {
+const EnrollmentShow = ({ user_id, id, course_id, deleteEnrollment }) => {
   const [user, setUser] = useState({ first_name: '', last_name: '' })
   const [editing, setEdit] = useState(false)
   
@@ -31,17 +32,21 @@ const EnrollmentShow = ({ user_id, id, course_id, updateEnrollment, deleteEnroll
             id={id}
             course_id={course_id}
             user_id={user_id}
-            updateEnrollment={updateEnrollment}
             setEdit={setEdit}
-            users={users}
           />
         </Modal.Body>
       </Modal>
-      <Button onClick={() => deleteEnrollment(id)}>
+      <Button onClick={() => deleteEnrollment(course_id, id)}>
         Delete
       </Button>
     </ListGroup.Item>
   )
 }
 
-export default EnrollmentShow;
+const ConnectedEnrollmentShow = (props) => (
+  <EnrollmentConsumer>
+    { value => <EnrollmentShow {...props} {...value} />}
+  </EnrollmentConsumer>
+)
+
+export default ConnectedEnrollmentShow;
