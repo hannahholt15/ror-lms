@@ -6,6 +6,7 @@ import CourseShow from './components/courses/CourseShow';
 import MainNavbar from './components/shared/MainNavbar';
 import Users from './components/users/Users';
 import UserShow from './components/users/UserShow';
+import Enrollments from './components/enrollments/Enrollments';
 
 const App = () => (
   <>
@@ -16,6 +17,7 @@ const App = () => (
       <Route path='/courses/:id' element={<CourseShow />} />
       <Route path='/users' element={<Users />} />
       <Route path='/users/:id' element={<UserShow />} />
+      <Route path='/:courseId/enrollments' element={<Enrollments />} />
       <Route path='/*' element={<Nomatch />} />
     </Routes>
   </>

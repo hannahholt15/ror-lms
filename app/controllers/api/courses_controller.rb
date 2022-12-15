@@ -1,5 +1,5 @@
 class Api::CoursesController < ApplicationController
-  before_action :set_course, only: [:show, :update, :destroy]
+  before_action :set_course, only: [:show, :update, :destroy, :courseusers]
 
   def index
     render json: Course.all
@@ -29,6 +29,10 @@ class Api::CoursesController < ApplicationController
   def destroy
     @course.destroy
     render json: { message: 'Course Deleted' }
+  end
+
+  def courseusers
+    render json: @course.users
   end
 
   private
