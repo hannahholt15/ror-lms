@@ -5,12 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CourseProvider from './providers/CourseProvider';
+import UserProvider from './providers/UserProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <CourseProvider>
+        <UserProvider>
+          <App />
+        </UserProvider>
+      </CourseProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation } from "react-router-dom";
 import axios from 'axios';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import UserList from '../users/UserList';
+import { CourseConsumer } from '../../providers/CourseProvider';
+import CourseForm from './CourseForm';
 
-const CourseShow = () => {
+const CourseShow = ({ deleteCourse }) => {
   const { id } = useParams()
 
   // optional if we are passing through the info through state 
@@ -13,7 +15,7 @@ const CourseShow = () => {
   const location = useLocation()
   const { title, desc, ctype, course_number } = location.state 
   const [users, setUsers] = useState([])
-
+  const [editing, setEdit] = useState(false)
   // if we were grabbing infor through the axios call
   // const [course, setCourse] = useState({ title: "",  desc: '', ctype: '', course_number: 0 })
 
@@ -41,6 +43,28 @@ const CourseShow = () => {
       >
         <Button>Enrollments</Button>
       </Link>
+      <Button variant="waring" onClick={() => setEdit(true)}>
+        Edit
+      </Button>
+
+      <Modal show={editing} onHide={() => setEdit(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Course</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <CourseForm
+            id={id}
+            title={title}
+            desc={desc}
+            ctype={ctype}
+            course_number={course_number}
+            setEdit={setEdit}
+          />
+        </Modal.Body>
+      </Modal>
+      <Button onClick={() => deleteCourse(id)}>
+        Delete
+      </Button>
       <br />
       <br />
       <br />
@@ -52,4 +76,10 @@ const CourseShow = () => {
   )
 }
 
-export default CourseShow;
+const ConnectCourseShow = (props) => (
+  <CourseConsumer>
+    { value => <CourseShow {...props} {...value} />}
+  </CourseConsumer>
+)
+
+export default ConnectCourseShow;

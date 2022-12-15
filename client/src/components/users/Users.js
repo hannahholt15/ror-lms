@@ -1,44 +1,11 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 import { Container, Button, Modal } from 'react-bootstrap';
 import UserList from './UserList';
 import UserForm from './UserForm';
+import { UserConsumer } from '../../providers/UserProvider';
 
-const Users = () => {
-  const [users, setUsers] = useState([])
+const Users = ({ users }) => {
   const [adding, setAdd] = useState(false)
-
-  useEffect( () => {
-    axios.get('/api/users')
-      .then(res => setUsers(res.data))
-      .catch(err => console.log(err))
-  }, [])
-
-  const addUser = (user) => {
-    axios.post('/api/users', { user })
-      .then(res => setUsers([...users, res.data]))
-      .catch(err => console.log(err))
-  }
-
-  const updateUser = (id, user) => {
-    axios.put(`/api/users/${id}`, { user })
-      .then( res => {
-        const newUpdatedUsers = user.map( u => {
-          if (u.id === id) {
-            return res.data
-          }
-          return u
-        })
-        setUsers(newUpdatedUsers)
-      })
-      .catch(err => console.log(err))
-  }
-
-  const deleteUser = (id) => {
-    axios.delete(`/api/users/${id}`)
-      .then( res => setUsers(users.filter( u => u.id !== id )))
-      .catch(err => console.log(err))
-  }
 
   return (
     <Container>
@@ -51,16 +18,20 @@ const Users = () => {
           <Modal.Title>Create User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <UserForm addUser={addUser} setAdd={setAdd} />
+          <UserForm setAdd={setAdd} />
         </Modal.Body>
       </Modal>
       <h1>All Users</h1>
       <UserList 
         users={users}
-        deleteUser={deleteUser}
       />
     </Container>
   )
 }
 
-export default Users;
+const ConnectedUsers = (props) => (
+  <UserConsumer>
+    { value => <Users {...props} {...value} />}
+  </UserConsumer>
+)
+export default ConnectedUsers;

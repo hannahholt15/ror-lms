@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { CourseConsumer } from '../../providers/CourseProvider';
 
 const CourseForm = ({ addCourse, setAdd, id, title, desc, ctype, course_number, updateCourse, setEdit }) => {
   const [course, setCourse] = useState({ title: '', desc: '', ctype: 'Misc', course_number: 0 })
@@ -76,4 +77,10 @@ const CourseForm = ({ addCourse, setAdd, id, title, desc, ctype, course_number, 
   )
 }
 
-export default CourseForm;
+const ConnectedCourseForm = (props) => (
+  <CourseConsumer>
+    { value => <CourseForm {...props} {...value} />}
+  </CourseConsumer>
+)
+
+export default ConnectedCourseForm;

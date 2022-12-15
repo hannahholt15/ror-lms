@@ -1,13 +1,16 @@
 import { useParams } from "react-router-dom";
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Button, Image } from 'react-bootstrap';
+import { Button, Image, Modal } from 'react-bootstrap';
 import CourseList from "../courses/CourseList";
+import { UserConsumer } from "../../providers/UserProvider";
+import UserForm from "./UserForm";
 
-const UserShow = ({}) => {
+const UserShow = ({ deleteUser }) => {
   const { id } = useParams()
   const [user, setUser] = useState({ first_name: '', last_name: '', email: '', password: '', img: '' })
   const [courses, setCourses] = useState([])
+  const [editing, setEdit] = useState(false)
 
   useEffect( () => {
     axios.get(`/api/users/${id}`)
@@ -26,8 +29,29 @@ const UserShow = ({}) => {
       <h4>Email: {email}</h4>
       <input disabled type='password' value={password} />
       <Image src={img} width='100px' alt='user' />
-      <Button>Edit</Button>
-      <Button>Delete</Button>
+      <Button variant="warning" onClick={() => setEdit(true)}>
+        Edit
+      </Button>
+
+      <Modal show={editing} onHide={() => setEdit(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Update User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <UserForm
+            id={id}
+            first_name={first_name}
+            last_name={last_name}
+            email={email}
+            password={password}
+            img={img}
+            setEdit={setEdit}
+          />
+        </Modal.Body>
+      </Modal>
+      <Button onClick={() => deleteUser(id)}>
+        Delete
+      </Button>
       <br />
       <br />
       <br />
@@ -40,4 +64,10 @@ const UserShow = ({}) => {
   )
 }
 
-export default UserShow;
+const ConnnectedUserShow = (props) => (
+  <UserConsumer>
+    { value => <UserShow {...props} {...value} />}
+  </UserConsumer>
+)
+
+export default ConnnectedUserShow;

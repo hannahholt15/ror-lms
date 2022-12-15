@@ -1,7 +1,7 @@
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 
-const CourseList = ({ courses, updateCourse, deleteCourse }) => (
+const CourseList = ({ courses  }) => (
   <Container>
     <Row sm='12' md='4'>
       { courses.map( c =>
@@ -20,13 +20,6 @@ const CourseList = ({ courses, updateCourse, deleteCourse }) => (
                   Show
                 </Button>
               </Link>
-              <Button variant="warning">Edit</Button>
-              <Button 
-                variant="danger"
-                onClick={() => deleteCourse(c.id)}
-              >
-                Delete
-              </Button>
             </Card.Body>
           </Card>
         </Col>

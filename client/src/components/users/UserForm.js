@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Form, Button } from 'react-bootstrap';
+import { UserConsumer } from "../../providers/UserProvider";
 
 const UserForm = ({ addUser, setAdd, id, first_name, last_name, email, password, img, updateUser, setEdit }) => {
   const [user, setUser] = useState({ first_name: '', last_name: '', email: '', password: '', img: '' })
@@ -80,4 +81,10 @@ const UserForm = ({ addUser, setAdd, id, first_name, last_name, email, password,
   )
 }
 
-export default UserForm;
+const ConnectedUserForm = (props) => (
+  <UserConsumer>
+    { value => <UserForm {...props} {...value} />}
+  </UserConsumer>
+)
+
+export default ConnectedUserForm;
